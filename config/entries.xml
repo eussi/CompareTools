@@ -1,6 +1,15 @@
 <entries>
 	<entry>
 		<command>cmp_flow</command>
-		<implementation></implementation>
+		<flows>
+			<flow>com.dctis.compare.tar.FlowFileNameValve</flow>
+		</flows>
+	</entry>
+	<entry>
+		<command>cmp_test</command>
+		<flows>
+			<flow>com.dctis.compare.test.TestValve</flow>
+			<flow>com.dctis.compare.test.TestValve2</flow>
+		</flows>
 	</entry>
 </entries>

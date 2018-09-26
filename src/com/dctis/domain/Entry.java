@@ -1,4 +1,7 @@
 package com.dctis.domain;
+
+import java.util.List;
+
 /**
  * 
  * @author wangxueming
@@ -6,18 +9,19 @@ package com.dctis.domain;
  */
 public class Entry {
 	private String command;
-	private String implementation;
+	private List<String> flows;
 	public String getCommand() {
 		return command;
 	}
 	public void setCommand(String command) {
 		this.command = command;
 	}
-	public String getImplementation() {
-		return implementation;
+	public List<String> getFlows() {
+		return flows;
 	}
-	public void setImplementation(String implementation) {
-		this.implementation = implementation;
+	public void setFlows(List<String> flows) {
+		this.flows = flows;
 	}
+	
 	
 }

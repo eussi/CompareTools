@@ -1,6 +1,7 @@
 package com.dctis.utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +37,14 @@ public class FileUtils {
 					if(commandNode!=null) {
 						entry.setCommand(commandNode.getText());
 					}
-					Node implementationNode = entryNode.selectSingleNode("implementation");
-					if(implementationNode!=null) {
-						entry.setImplementation(implementationNode.getText());
+					List<String> flows = new ArrayList<String>();
+					List<Node> flowNodes = entryNode.selectNodes("flows/flow");
+					if (flowNodes != null) {
+						for (Node flowNode : flowNodes) {
+							flows.add(flowNode.getText());
+						}
 					}
+					entry.setFlows(flows);
 					entries.put(entry.getCommand(), entry);
 				}
 			}

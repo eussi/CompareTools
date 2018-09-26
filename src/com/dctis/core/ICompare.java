@@ -11,5 +11,5 @@ public interface ICompare {
 	 * @param dest 比较文件2
 	 * @return 是否一致
 	 */
-	public boolean compare(String orig, String dest);
+	public void compare(String orig, String dest);
 }
