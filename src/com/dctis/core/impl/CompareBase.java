@@ -1,4 +1,4 @@
-package com.dctis.compare;
+package com.dctis.core.impl;
 
 import com.dctis.core.ICompare;
 import com.dctis.core.IPipeline;

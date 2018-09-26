@@ -1,19 +1,19 @@
-package com.dctis.compare.tar;
+package com.dctis.compare.tar.commonflow;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dctis.compare.ValveBase;
 import com.dctis.compare.tar.constants.TarConstants;
 import com.dctis.compare.tar.utils.TarFileUtils;
 import com.dctis.core.IValveContext;
+import com.dctis.core.impl.ValveBase;
 import com.dctis.utils.PrintUtils;
 
-public class FlowFileNameValve extends ValveBase{
+public class FileNumNameValve extends ValveBase{
 
 	@Override
 	public String getInfo() {
-		return "比较Flow版本包中文件数是否一致";
+		return "比较tar包中文件名是否一致，将不一致文件列出";
 	}
 
 	@Override

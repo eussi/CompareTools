@@ -1,4 +1,4 @@
-package com.dctis.compare.tar;
+package com.dctis.compare.tar.flowctrlflow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,17 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dctis.compare.ValveBase;
 import com.dctis.compare.tar.constants.TarConstants;
 import com.dctis.compare.tar.utils.TarFileUtils;
 import com.dctis.core.IValveContext;
+import com.dctis.core.impl.ValveBase;
 import com.dctis.utils.PrintUtils;
 
-public class FlowDiffConfValve extends ValveBase{
+public class FlowConfDiffValve extends ValveBase{
 
 	@Override
 	public String getInfo() {
-		return "比较Flow版本包中flow_conf与flow_conf1";
+		return "比较tar包中flow_conf与flow_conf1中存在差异的文件，将差异文件列出";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -39,8 +39,20 @@ public class FlowDiffConfValve extends ValveBase{
 				if(s.contains(TarConstants.PATH_FLOW1_FLAG))
 					destFiles.add(s);
 			}
+			
+			//比较
 			List<String> origHas = compareList(origFiles, destFiles);
 			List<String> destHas = compareList(destFiles, origFiles);
+		    if(origHas.size()>0) {
+		    	PrintUtils.print("[" + orig + "]flow_conf相对于[" + dest + "]flow_conf1多余文件：");
+		    	PrintUtils.printList(origHas);
+		    }
+		    PrintUtils.printNewLine();
+		    
+		    if(destHas.size()>0) {
+		    	PrintUtils.print("[" + dest + "]flow_conf1相对于[" + orig + "]flow_conf多余文件：");
+		    	PrintUtils.printList(destHas);
+		    }
 			
 			int count=0;
 			Map<String, String> confButDiff = new HashMap<String, String>();
@@ -73,7 +85,7 @@ public class FlowDiffConfValve extends ValveBase{
 				}
 			}
 			PrintUtils.print("处理完成，处理文件数：" + count);
-			PrintUtils.print("[" + dest + "]与[" + orig + "]差异文件：");
+			PrintUtils.print("[" + orig + "]与[" + dest + "]差异文件：");
 			PrintUtils.printMap(confButDiff);
 			
 		    PrintUtils.printLine();

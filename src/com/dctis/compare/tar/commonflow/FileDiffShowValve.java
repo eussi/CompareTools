@@ -1,20 +1,20 @@
-package com.dctis.compare.tar;
+package com.dctis.compare.tar.commonflow;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.dctis.compare.ValveBase;
 import com.dctis.compare.tar.constants.TarConstants;
 import com.dctis.compare.tar.utils.TarFileUtils;
 import com.dctis.core.IValveContext;
+import com.dctis.core.impl.ValveBase;
 import com.dctis.utils.PrintUtils;
 
-public class FlowFileContentValve extends ValveBase{
+public class FileDiffShowValve extends ValveBase{
 
 	@Override
 	public String getInfo() {
-		return "比较Flow版本包中文件内容是否一致";
+		return "比较tar包中共同存在文件内容是否一致，将不一致的文件名列出";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -57,7 +57,7 @@ public class FlowFileContentValve extends ValveBase{
 				}
 			}
 			PrintUtils.print("处理完成，处理文件数：" + count);
-			PrintUtils.print("[" + dest + "]与[" + orig + "]差异文件：");
+			PrintUtils.print("[" + orig + "]与[" + dest + "]差异文件：");
 			PrintUtils.printList(commonButDiff);
 			
 		    PrintUtils.printLine();

@@ -1,7 +1,7 @@
 package com.dctis.compare.test;
 
-import com.dctis.compare.ValveBase;
 import com.dctis.core.IValveContext;
+import com.dctis.core.impl.ValveBase;
 import com.dctis.utils.PrintUtils;
 
 public class TestValve2 extends ValveBase{

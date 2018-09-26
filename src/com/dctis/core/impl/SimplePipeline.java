@@ -1,4 +1,4 @@
-package com.dctis.compare;
+package com.dctis.core.impl;
 
 import java.util.HashMap;
 import java.util.Map;

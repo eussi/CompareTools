@@ -3,9 +3,9 @@ package com.dctis.startup;
 import java.util.List;
 import java.util.Map;
 
-import com.dctis.compare.CompareBase;
 import com.dctis.constants.Constants;
 import com.dctis.core.IValve;
+import com.dctis.core.impl.CompareBase;
 import com.dctis.domain.Entry;
 import com.dctis.utils.FileUtils;
 import com.dctis.utils.PrintUtils;
@@ -35,17 +35,19 @@ public class Bootstrap {
 		CompareBase cmb = new CompareBase();
 		List<String> flows = entry.getFlows();
 		if(flows.size()==0) {
-			PrintUtils.print("The process is empty and retry after the configuration is cleared. ");
+			PrintUtils.print("The process is empty, Try again after configuration. ");
 			System.exit(0);
 		}
 		for(String flow : flows) {
 			try {
-				Class clazz = Class.forName(flow);
+				Class<?> clazz = Class.forName(flow);
 				IValve valve = (IValve) clazz.newInstance();
 				cmb.addValve(valve);
 			} catch (Exception e) {
 //				e.printStackTrace();
 				PrintUtils.print("Create instance exception: " + e.getMessage());
+				PrintUtils.print("Program quit!!!");
+				System.exit(0);
 			} 
 		}
 		

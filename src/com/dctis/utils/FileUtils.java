@@ -25,6 +25,7 @@ public class FileUtils {
 	 * 
 	 * @param ifd
 	 */
+	@SuppressWarnings("unchecked")
 	public static Map<String, Entry> readEntries(String path) {
 		SAXReader reader = new SAXReader();
 		Document document = null;
@@ -61,6 +62,7 @@ public class FileUtils {
 	public static String[] read(String fileName) {
 		try {
 			List<String> contents = new ArrayList<String>();
+			@SuppressWarnings("resource")
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
 			while ((line = br.readLine()) != null) {

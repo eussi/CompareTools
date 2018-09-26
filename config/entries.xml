@@ -1,18 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+说明：
+	1、程序启动类com.dctis.startup.Bootstrap接受三个参数：命令，文件路径一，文件路径二
+	2、此配置文件由每一条entry由一个命令和一系列处理流程组成
+	3、每一个处理流程继承抽象类com.dctis.core.impl.ValveBase,实现invokeHook(String orig, String dest, IValveContext context)抽象方法
+	4、处理流程接收两个文件路径参数，一个上下文参数，对文件的对比工作在invokeHook方法中实现，后续开发只需实现该类，并在此添加配置即可
+	4、程序根据启动类传入的命令参数一次执行此文件配置的每一个处理流程
+-->
 <entries>
 	<entry>
-		<command>cmp_flow</command>
+		<command>cmp_flow</command><!-- 用于比较流控tar包 -->
 		<flows>
-			<flow>com.dctis.compare.tar.FlowFileNameValve</flow>
-			<flow>com.dctis.compare.tar.FlowDiffConfValve</flow>
-			<flow>com.dctis.compare.tar.FlowFileContentValve</flow>
-			<flow>com.dctis.compare.tar.FlowDiffFileCompareValve</flow>
+			<flow>com.dctis.compare.tar.commonflow.FileNumNameValve</flow><!-- 比较传入的两个jar包中文件名是否一致，并将差异列出 -->
+			<flow>com.dctis.compare.tar.commonflow.FileDiffShowValve</flow><!-- 比较传入的两个jar包中文件内容是否一致，并将差异文件名列出 -->
+			<flow>com.dctis.compare.tar.commonflow.FileContentDiffShowValve</flow><!-- 列出两个jar包中文件内容的差异 -->
+			<flow>com.dctis.compare.tar.flowctrlflow.FlowConfDiffValve</flow><!-- 列出流控jar包中conf_flow,conf_flow1中文件名是否一致，并将差异列出 -->
+			<flow>com.dctis.compare.tar.flowctrlflow.FlowConfContentDiffValve</flow><!-- 列出流控jar包中conf_flow,conf_flow1中文件内容差异 -->
 		</flows>
 	</entry>
 	<entry>
-		<command>cmp_test</command>
+		<command>cmp_esb</command><!-- 用于比较ESB tar包 -->
 		<flows>
-			<flow>com.dctis.compare.test.TestValve</flow>
-			<flow>com.dctis.compare.test.TestValve2</flow>
+			<flow>com.dctis.compare.tar.commonflow.FileNumNameValve</flow><!-- 比较传入的两个jar包中文件名是否一致，并将差异列出 -->
+			<flow>com.dctis.compare.tar.commonflow.FileDiffShowValve</flow><!-- 比较传入的两个jar包中文件内容是否一致，并将差异文件名列出 -->
+			<flow>com.dctis.compare.tar.commonflow.FileContentDiffShowValve</flow><!-- 列出两个jar包中文件内容的差异 -->
+		</flows>
+	</entry>
+	<entry>
+		<command>cmp_test</command><!-- 测试命令 -->
+		<flows>
+			<flow>com.dctis.compare.test.TestValve</flow><!-- 测试流程 -->
+			<flow>com.dctis.compare.test.TestValve2</flow><!-- 测试流程 -->
 		</flows>
 	</entry>
 </entries>

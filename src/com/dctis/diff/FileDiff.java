@@ -1,8 +1,5 @@
 package com.dctis.diff;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.List;
 /**
  * 文本对比实现，来自网络
