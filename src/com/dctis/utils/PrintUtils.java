@@ -1,12 +1,20 @@
 package com.dctis.utils;
 
+import java.util.List;
+
 /**
  * 
  * @author wangxueming
  *
  */
 public class PrintUtils {
-
+	//´òÓ¡×Ö·û´®Êý×é
+	public static void printList(List<String> list) {
+		for(String s : list) {
+			print("[" + s + "]");
+		}
+	}
+	
 	public static void printStep(String s) {
 		print("===================================" + s + "===================================");
 	}

@@ -96,6 +96,9 @@ public interface IValveContext {
      *
      */
     public void invokeNext(String orgi, String dest);
-
+    
+    public Object getTemp(String key);
+    
+    public void setTemp(String key, Object value);
 
 }

@@ -3,6 +3,7 @@
 		<command>cmp_flow</command>
 		<flows>
 			<flow>com.dctis.compare.tar.FlowFileNameValve</flow>
+			<flow>com.dctis.compare.tar.FlowFileContentValve</flow>
 		</flows>
 	</entry>
 	<entry>

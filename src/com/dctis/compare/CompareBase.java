@@ -31,4 +31,5 @@ public class CompareBase implements ICompare, IPipeline{
 	public void compare(String orig, String dest) {
 		invoke(orig, dest);
 	}
+
 }

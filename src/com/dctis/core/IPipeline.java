@@ -155,5 +155,4 @@ public interface IPipeline {
      */
     public void removeValve(IValve valve);
 
-
 }
