@@ -1,6 +1,7 @@
 package com.dctis.compare.tar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.dctis.compare.ValveBase;
@@ -16,49 +17,66 @@ public class FlowFileContentValve extends ValveBase{
 		return "比较Flow版本包中文件内容是否一致";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void invokeHook(String orig, String dest, IValveContext context) {
 			PrintUtils.print(getInfo());
 			PrintUtils.printLine();
-			//获取tar包中所有的文件
-			PrintUtils.print(TarFileUtils.getFileContentFromTar(orig, "SmartESB/configs/flow_conf1/log4j.properties"));
-			PrintUtils.printList((List<String>) context.getTemp(TarConstants.DEST_FILES));
+			//获取上一个valve所获取的内容
+			List<String> origFiles = (List<String>) context.getTemp(TarConstants.ORIG_FILES);
+			List<String> destFiles = (List<String>) context.getTemp(TarConstants.DEST_FILES);
+			List<String> origHas = (List<String>) context.getTemp(TarConstants.ORIG_HAS);
+			List<String> destHas = (List<String>) context.getTemp(TarConstants.DEST_HAS);
 			
-//		    List<String> origFiles = TarFileUtils.getAllFileFromTar(orig);
-//		    List<String> destFiles = TarFileUtils.getAllFileFromTar(dest);
-//		    //比较
-//		    List<String> origHas = compareList(origFiles, destFiles);
-//		    if(origHas.size()>0) {
-//		    	PrintUtils.print(orig + "相对于" + dest + "多余文件：");
-//		    	PrintUtils.printList(origHas);
-//		    }
-//		    
-//		    List<String> destHas = compareList(destFiles, origFiles);
-//		    if(destHas.size()>0) {
-//		    	PrintUtils.print(orig + "相对于" + dest + "多余文件：");
-//		    	PrintUtils.printList(destHas);
-//		    }
-		    PrintUtils.printLine();
-	}
-	/**
-	 * 比较第一个数组比第二个数组多余的元素
-	 * @param orig
-	 * @param dest
-	 * @return 返回多余的元素
-	 */
-	private List<String> compareList(List<String> orig, List<String> dest) {
-		List<String> list = new ArrayList<String>();
-		for(String s : orig) {
-			boolean ok = true;
-			for(String s1 : dest) {
-				if(s.equals(s1)) {
-					ok = false;
+			//对比文件内容是否一致，不一致的列出来
+			int count=0;
+			List<String> commonButDiff = new ArrayList<String>();
+			PrintUtils.print("开始比较文件");
+			for(String origFile : origFiles) {
+				if(!listHas(origHas, origFile) && !listHas(commonButDiff, origFile)) {
+					byte[] origContent = TarFileUtils.getFileContentFromTar(orig, origFile);
+					byte[] destContent = TarFileUtils.getFileContentFromTar(dest, origFile);
+					if(!Arrays.equals(origContent, destContent)) {
+						commonButDiff.add(origFile);
+					}
+					if(++count%TarConstants.DEALFILE_PRINT==0 && count>0) {
+						PrintUtils.print("已经处理文件数：" + count);
+					}
 				}
 			}
-			if(ok)
-				list.add(s);
-		}
-		return list;
+			for(String destFile : destFiles) {
+				if(!listHas(destHas, destFile) && !listHas(commonButDiff, destFile)) {
+					byte[] origContent = TarFileUtils.getFileContentFromTar(orig, destFile);
+					byte[] destContent = TarFileUtils.getFileContentFromTar(dest, destFile);
+					if(!Arrays.equals(origContent, destContent)) {
+						commonButDiff.add(destFile);
+					}
+					if(++count%TarConstants.DEALFILE_PRINT==0 && count>0) {
+						PrintUtils.print("已经处理文件数：" + count);
+					}
+				}
+			}
+			PrintUtils.print("处理完成，处理文件数：" + count);
+			PrintUtils.print("[" + dest + "]与[" + orig + "]差异文件：");
+			PrintUtils.printList(commonButDiff);
+			
+		    PrintUtils.printLine();
+		    
+		    //存放结果传递给下一个valve
+		    context.setTemp(TarConstants.FILE_DIFF, commonButDiff);
 	}
-
+	
+	/**
+	 * 判断数组中是否包含字符串
+	 * @param list
+	 * @param str
+	 * @return
+	 */
+	private boolean listHas(List<String> list, String str) {
+		for(String s : list) {
+			if(str.equals(s))
+				return true;
+		}
+		return false;
+	}
 }

@@ -1,6 +1,8 @@
 package com.dctis.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,5 +56,41 @@ public class FileUtils {
 			PrintUtils.print("配置文件[entries.xml]解析错误：" + e.getMessage());
 		}
 		return null;
+	}
+	
+	public static String[] read(String fileName) {
+		try {
+			List<String> contents = new ArrayList<String>();
+			BufferedReader br = new BufferedReader(new FileReader(fileName));
+			String line;
+			while ((line = br.readLine()) != null) {
+				contents.add(line);
+			}
+			return (String[]) contents.toArray(new String[]{});
+		} catch (Exception e) {
+			System.err.println("error reading " + fileName + ": " + e);
+			System.exit(1);
+		}
+		return null;
+	}
+	
+	/**
+	 * 验证文件是否为UNIX格式文件 UNIX换行符\n OS换行符\r Window换行符 \r\n \r 13, \n 10
+	 * 
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean isUnixFile(String content) {
+		int index = content.indexOf(10); // "\n"字符
+		if (index == -1)
+			return false;
+		int nextIndex = index - 1;
+		if(nextIndex == -1)         //2018-04-14 解决该方法判断Unix文件第一行为空行报错bug
+			return true;
+		char nextChar = content.charAt(nextIndex);
+		if (nextChar == 13) // "\r"字符
+			return false;
+		return true;
 	}
 }

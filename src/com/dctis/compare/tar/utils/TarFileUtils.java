@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 
+import com.dctis.compare.tar.constants.TarConstants;
+import com.dctis.utils.FileUtils;
 import com.dctis.utils.PrintUtils;
 
 /**
@@ -63,7 +65,7 @@ public class TarFileUtils {
 	 * @param filePath
 	 * @return
 	 */
-	public static String getFileContentFromTar(String tarPath, String filePath) {
+	public static byte[] getFileContentFromTar(String tarPath, String filePath) {
 		File tarFile = new File(tarPath);
 	    FileInputStream fileIn = null;
 	    BufferedInputStream bufIn = null;
@@ -80,7 +82,54 @@ public class TarFileUtils {
 	            if(entry.getName().equals(filePath)){
 	                byte[] b = new byte[(int) entry.getSize()];
 	                taris.read(b, 0, (int) entry.getSize());
-	                return new String(b);
+	                return b;
+	            }
+	        }
+	    } catch (Exception e) {
+//			e.printStackTrace();
+	    	PrintUtils.print("tar文件读取内容处理错误！");
+		} finally {
+	        try {
+				taris.close();
+				bufIn.close();
+				fileIn.close();
+			} catch (IOException e) {
+//				e.printStackTrace();
+				PrintUtils.print("数据流关闭失败！");
+			}
+	    }
+	    return null;
+	}
+	
+	/**
+	 * 根据tar包中文件全路径名，获取文件内容数组
+	 * @param tarPath
+	 * @param filePath
+	 * @return
+	 */
+	public static String[] getStrArrayContentFromTar(String tarPath, String filePath) {
+		File tarFile = new File(tarPath);
+	    FileInputStream fileIn = null;
+	    BufferedInputStream bufIn = null;
+	    TarArchiveInputStream taris = null;
+	    try {
+	        fileIn = new FileInputStream(tarFile);
+	        bufIn = new BufferedInputStream(fileIn);
+	        taris = new TarArchiveInputStream(bufIn);
+	        TarArchiveEntry entry = null;
+	        while ((entry = taris.getNextTarEntry()) != null) {
+	            if (entry.isDirectory()) {
+	            	continue;
+	            }
+	            if(entry.getName().equals(filePath)){
+	                byte[] b = new byte[(int) entry.getSize()];
+	                taris.read(b, 0, (int) entry.getSize());
+	                String content = new String(b, TarConstants.ENCODING);
+	                if(FileUtils.isUnixFile(content)) {
+	                	return content.split(TarConstants.UNIX_NEWLINE);
+	                } else {
+	                	return content.split(TarConstants.WIN_NEWLINE);
+	                }
 	            }
 	        }
 	    } catch (Exception e) {

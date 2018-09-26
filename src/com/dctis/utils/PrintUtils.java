@@ -1,6 +1,7 @@
 package com.dctis.utils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -37,6 +38,13 @@ public class PrintUtils {
 	}
 	public static void printNewLine() {
 		System.out.println();
+	}
+
+	public static void printMap(Map<String, String> map) {
+		for(String s : map.keySet()) {
+			print("[" + s + "<----->" + map.get(s) +  "]");
+		}
+		
 	}
 	
 }
