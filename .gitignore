@@ -15,7 +15,7 @@
 *.dmg
 *.gz
 *.iso
-*.jar
+#*.jar
 *.rar
 *.tar
 *.zip
@@ -46,6 +46,7 @@ target/
 classes/
 .classpath
 #/bin
+lib/
 *.swp
 .DS_Store
 .DS_Store?
