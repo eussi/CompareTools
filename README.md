@@ -1,26 +1,27 @@
 # CompareTools
 
-##### 功能说明：
+##### 1、功能说明：
 1. 首先应用目录下configs/entries.xml配置文件，由多条entry组成，每一个entry由一个命令和一系列处理流程组成。程序启动后，程序根据启动类传入的命令参数依次执行此文件配置的每一个处理流程
 2. 每一个处理流程继承抽象类com.dcits.core.impl.ValveBase,实现invokeHook(String orig, String dest, IValveContext context)抽象方法实现处理过程
 3. invokeHook接收三个参数，两个文件路径参数，和一个上下文参数，对两个文件或文件夹的对比等工作在invokeHook方法中实现，上下文参数可以储存当前处理流程的处理结果，供给下一个处理流程使用
 4. 后续需求只需实现该处理流程，并在configs/entries.xml中添加一条entry配置即可
 
-##### 使用方式：
+#####  2、使用方式：
 1. 按照以下步骤操作，首先了解后续介绍的部署应用目录结构
 2. 查看应用目录下configs/entries.xml配置文件，已经实现了cmp_flow、cmp_esb、cmp_test命令
 3. 在linux环境中，运行 sh startup.sh cmp_test path1 path2 即可
 4. 在windows环境中，打开cmd命令窗口，运行 startup.bat cmp_test path1 path2 即可
 
-##### jdk:1.7.0_79
+##### 3、jdk:
+1.7.0_79
 
-##### 依赖jar包（前两个jar包已经打进核心包，第三个是解析tar文件所需jar包）:
+##### 4、依赖jar包（前两个jar包已经打进核心包，第三个是解析tar文件所需jar包）:
 
 * dom4j-1.6.1.jar
 * jaxen-1.1.6.jar
 * commons-compress-1.4.1.jar
 
-##### 实现流程介绍：
+##### 5、已实现处理流程介绍：
 * com.dcits.compare.tar.commonflow.FileNumNameValve 比较传入的两个jar包中文件名是否一致，并将差异列出
 * com.dcits.compare.tar.commonflow.FileDiffShowValve 比较传入的两个jar包中文件内容是否一致，并将差异文件名列出
 * com.dcits.compare.tar.commonflow.FileContentDiffShowValve 列出两个jar包中文件内容的差异
@@ -29,7 +30,7 @@
 * com.dcits.compare.test.TestValve 测试流程
 * com.dcits.compare.test.TestValve2 测试流程
 
-##### 脚本启动：
+##### 6、脚本启动：
 1. 目前将核心代码打包为CompareTools_1.0_release.jar，启动时引用即可（只包含实现了cmp_test的代码，后续需求class放在classes目录，并在configs/entries.xml中添加一条entry配置即可）
 2. 部署应用目录结构
 
@@ -50,6 +51,7 @@
 > startup.bat windows环境启动脚本，注意文件是PC格式，编码为GBK
 
 3. 脚本内容：
+
 **startup.sh**
 ```
 #!/bin/sh
