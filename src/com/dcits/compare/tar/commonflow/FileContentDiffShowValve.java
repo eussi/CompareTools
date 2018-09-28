@@ -1,8 +1,10 @@
 package com.dcits.compare.tar.commonflow;
 
+import java.io.File;
 import java.util.List;
 
 import com.dcits.compare.tar.constants.TarConstants;
+import com.dcits.compare.tar.utils.FileUtils;
 import com.dcits.compare.tar.utils.TarFileUtils;
 import com.dcits.core.IValveContext;
 import com.dcits.core.impl.ValveBase;
@@ -23,20 +25,35 @@ public class FileContentDiffShowValve extends ValveBase{
 			PrintUtils.printLine();
 			//获取上一个valve所获取的内容
 			List<String> diffFiles = (List<String>) context.getTemp(TarConstants.FILE_DIFF);
+			boolean isExtract = (boolean) context.getTemp(TarConstants.IS_EXTRACT);
+			String origExtract = (String) context.getTemp(TarConstants.ORIG_EXTRACT);
+			String destExtract = (String) context.getTemp(TarConstants.DEST_EXTRACT);
+			
 			for(String diffFile : diffFiles) {
 				//不处理二进制文件，如*.jar,*.class
 				if(diffFile.endsWith("jar") || diffFile.endsWith("class"))
 					continue;
 				//比较文件
 				PrintUtils.print("比较文件：" + diffFile);
-				String[] origStrs = TarFileUtils.getStrArrayContentFromTar(orig, diffFile);
-				String[] destStrs = TarFileUtils.getStrArrayContentFromTar(dest, diffFile);
+				String[] origStrs = null;
+				String[] destStrs = null;
+				if(isExtract) {
+					origStrs = FileUtils.getContentFromFile(diffFile);
+					destStrs = FileUtils.getContentFromFile(diffFile.replace(origExtract, destExtract));
+				} else {
+					origStrs = TarFileUtils.getStrArrayContentFromTar(orig, diffFile);
+					destStrs = TarFileUtils.getStrArrayContentFromTar(dest, diffFile);
+				}
 				//比较
 				new FileDiff(origStrs, destStrs);
 				PrintUtils.printNewLine();
 			}
 			
 		    PrintUtils.printLine();
+		    
+		    //删除解压的临时文件
+		    String extractOrigDir = System.getProperty("user.dir") + File.separator + ".tmp";
+		    FileUtils.delAllFile(extractOrigDir);
 	}
 	
 

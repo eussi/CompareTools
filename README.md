@@ -19,14 +19,15 @@
 
 * dom4j-1.6.1.jar
 * jaxen-1.1.6.jar
-* commons-compress-1.4.1.jar
+* commons-compress-1.18.jar
 
 ##### 5、已实现处理流程介绍：
-* com.dcits.compare.tar.commonflow.FileNumNameValve 比较传入的两个jar包中文件名是否一致，并将差异列出
-* com.dcits.compare.tar.commonflow.FileDiffShowValve 比较传入的两个jar包中文件内容是否一致，并将差异文件名列出
-* com.dcits.compare.tar.commonflow.FileContentDiffShowValve 列出两个jar包中文件内容的差异
+* com.dcits.compare.tar.commonflow.ExtractTarValve 将传入的两个tar包解压，如果加入此流程，后续的commonflow均对比解压后文件，此目的提高效率，但是解压会占用空间
+* com.dcits.compare.tar.commonflow.FileNumNameValve 比较传入的两个tar包中文件名是否一致，并将差异列出
+* com.dcits.compare.tar.commonflow.FileDiffShowValve 比较传入的两个tar包中文件内容是否一致，并将差异文件名列出
+* com.dcits.compare.tar.commonflow.FileContentDiffShowValve 列出两个tar包中文件内容的差异
 * com.dcits.compare.tar.flowctrlflow.FlowConfDiffValve 列出流控jar包中conf_flow,conf_flow1中文件名是否一致，并将差异列出
-* com.dcits.compare.tar.flowctrlflow.FlowConfContentDiffValve 列出流控jar包中conf_flow,conf_flow1中文件内容差异
+* com.dcits.compare.tar.flowctrlflow.FlowConfContentDiffValve 列出流控tar包中conf_flow,conf_flow1中文件内容差异
 * com.dcits.compare.test.TestValve 测试流程
 * com.dcits.compare.test.TestValve2 测试流程
 

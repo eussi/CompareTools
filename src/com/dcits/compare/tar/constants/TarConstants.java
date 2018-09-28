@@ -9,6 +9,10 @@ public class TarConstants {
 	public final static String FILE_DIFF = "FILE_DIFF";
 	public final static String CONF_FILE_DIFF = "CONF_FILE_DIFF";
 	
+	public final static String ORIG_EXTRACT = "ORIG_EXTRACT";
+	public final static String DEST_EXTRACT = "DEST_EXTRACT";
+	public final static String IS_EXTRACT = "IS_EXTRACT"; //是否解压
+	
 	//处理多少文件后打印处理结果
 	public final static int DEALFILE_PRINT = 50;
 	

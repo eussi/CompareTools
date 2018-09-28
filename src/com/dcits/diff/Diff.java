@@ -167,7 +167,7 @@ public class Diff {
         int bEnd = b.size() - 1;
 
         TreeMap<Integer, Integer> matches = new TreeMap<Integer, Integer>();
-
+        
         while (aStart <= aEnd && bStart <= bEnd && equals(a.get(aStart), b.get(bStart))) {
             matches.put(aStart++, bStart++);
         }

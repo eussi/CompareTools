@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dcits.compare.tar.constants.TarConstants;
+import com.dcits.compare.tar.utils.FileUtils;
 import com.dcits.compare.tar.utils.TarFileUtils;
 import com.dcits.core.IValveContext;
 import com.dcits.core.impl.ValveBase;
@@ -20,18 +21,35 @@ public class FileNumNameValve extends ValveBase{
 	public void invokeHook(String orig, String dest, IValveContext context) {
 			PrintUtils.print(getInfo());
 			PrintUtils.printLine();
-			//获取tar包中所有的文件
-		    List<String> origFiles = TarFileUtils.getAllFileFromTar(orig);
-		    List<String> destFiles = TarFileUtils.getAllFileFromTar(dest);
+			boolean isExtract = (boolean) context.getTemp(TarConstants.IS_EXTRACT);
+			List<String> origFiles = null;
+		    List<String> destFiles = null;
+		    List<String> origHas = null;
+		    List<String> destHas = null;
+			if(isExtract) {
+				origFiles = new ArrayList<String>();
+				destFiles = new ArrayList<String>();
+				String origExtract = (String) context.getTemp(TarConstants.ORIG_EXTRACT);
+				String destExtract = (String) context.getTemp(TarConstants.DEST_EXTRACT);
+				FileUtils.getAllFiles(origFiles, origExtract);
+				FileUtils.getAllFiles(destFiles, destExtract);
+				origHas = compareAbosoluteList(origFiles, destFiles, origExtract, destExtract);
+				destHas = compareAbosoluteList(destFiles, origFiles, origExtract, destExtract);
+			} else {
+				//获取tar包中所有的文件
+				origFiles = TarFileUtils.getAllFileFromTar(orig);
+			    destFiles = TarFileUtils.getAllFileFromTar(dest);
+			    origHas = compareList(origFiles, destFiles);
+			    destHas = compareList(destFiles, origFiles);
+			}
+			
 		    //比较
-		    List<String> origHas = compareList(origFiles, destFiles);
 		    if(origHas.size()>0) {
 		    	PrintUtils.print("[" + orig + "]相对于[" + dest + "]多余文件：");
 		    	PrintUtils.printList(origHas);
 		    }
 		    PrintUtils.printNewLine();
 		    
-		    List<String> destHas = compareList(destFiles, origFiles);
 		    if(destHas.size()>0) {
 		    	PrintUtils.print("[" + dest + "]相对于[" + orig + "]多余文件：");
 		    	PrintUtils.printList(destHas);
@@ -59,6 +77,33 @@ public class FileNumNameValve extends ValveBase{
 				if(s.equals(s1)) {
 					ok = false;
 				}
+			}
+			if(ok)
+				list.add(s);
+		}
+		return list;
+	}
+	/**
+	 * 比较第一个数组比第二个数组多余的元素,数组中包含的是全路径
+	 * @param orig
+	 * @param dest
+	 * @param destExtract 
+	 * @param origExtract 
+	 * @return 返回多余的元素
+	 */
+	private List<String> compareAbosoluteList(List<String> orig, List<String> dest, String origExtract, String destExtract) {
+		List<String> list = new ArrayList<String>();
+		for(String s : orig) {
+			boolean ok = true;
+			for(String s1 : dest) {
+				String s2=s.replace(origExtract, "");
+				s2 = s2.replace(destExtract, "");
+				String s3=s1.replace(origExtract, "");
+				s3 = s3.replace(destExtract, "");
+				if(s2.equals(s3)) {
+					ok = false;
+				}
+				
 			}
 			if(ok)
 				list.add(s);

@@ -24,21 +24,10 @@ public class FlowConfDiffValve extends ValveBase{
 	public void invokeHook(String orig, String dest, IValveContext context) {
 			PrintUtils.print(getInfo());
 			PrintUtils.printLine();
-			//获取上一个valve所获取的内容
-			List<String> origGetFiles = (List<String>) context.getTemp(TarConstants.ORIG_FILES);
-			List<String> destGetFiles = (List<String>) context.getTemp(TarConstants.DEST_FILES);
 			
 			//筛选包含flow_conf的文件
-			List<String> origFiles = new ArrayList<String>();   //假设包含flow_conf，不包含flow_conf1
-			for(String s : origGetFiles) {
-				if(s.contains(TarConstants.PATH_FLOW_FLAG))
-					origFiles.add(s);
-			}
-			List<String> destFiles = new ArrayList<String>();
-			for(String s : destGetFiles) {
-				if(s.contains(TarConstants.PATH_FLOW1_FLAG))
-					destFiles.add(s);
-			}
+			List<String> origFiles = TarFileUtils.getAllFileFromTar(orig, TarConstants.PATH_FLOW_FLAG);
+			List<String> destFiles = TarFileUtils.getAllFileFromTar(dest, TarConstants.PATH_FLOW1_FLAG);
 			
 			//比较
 			List<String> origHas = compareList(origFiles, destFiles);
