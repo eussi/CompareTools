@@ -8,7 +8,7 @@
 
 #####  2、使用方式：
 1. 按照以下步骤操作，首先了解后续介绍的部署应用目录结构
-2. 查看应用目录下configs/entries.xml配置文件，已经实现了cmp_flow、cmp_esb、cmp_test命令
+2. 查看应用目录下configs/entries.xml配置文件，已经实现了cmp_flow、cmp_flow_extract、cmp_esb、cmp_esb_extract、cmp_test命令
 3. 在linux环境中，运行 sh startup.sh cmp_test path1 path2 即可
 4. 在windows环境中，打开cmd命令窗口，运行 startup.bat cmp_test path1 path2 即可
 

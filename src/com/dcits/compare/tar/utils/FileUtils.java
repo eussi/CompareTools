@@ -14,29 +14,30 @@ import com.dcits.utils.PrintUtils;
 
 public class FileUtils {
 	/**
-	 * 获取某目录下所有文件
+	 * 获取某目录下所有文件，相对于extract路径的相对路径
 	 * 
 	 * @param fileNames
 	 * @param path
+	 * @param extract 
 	 */
-	public static void getAllFiles(List<String> files, String path) {
+	public static void getAllFiles(List<String> files, String path, String extract) {
 		File file = new File(path);
 		if (file.isDirectory()) {
 			File[] fs = file.listFiles();
 			for (File f : fs) {
-				getAllFiles(files, f.getAbsolutePath());
+				getAllFiles(files, f.getAbsolutePath(), extract);
 			}
 		} else {
-			files.add(file.getAbsolutePath());
+			files.add(file.getAbsolutePath().replace(extract, ""));
 		}
 	}
 
 	@SuppressWarnings("resource")
-	public static byte[] getFileContent(String origFile) {
+	public static byte[] getFileContent(String extract, String origFile) {
 		FileInputStream fis = null;
 		ByteArrayOutputStream bao = null;
 		try {
-			fis = new FileInputStream(new File(origFile));
+			fis = new FileInputStream(new File(extract + origFile));
 			byte[] b = new byte[1024];
 			bao = new ByteArrayOutputStream();
 			int byteLength = -1;
@@ -59,19 +60,19 @@ public class FileUtils {
 		return null;
 	}
 
-	public static String[] getContentFromFile(String diffFile) {
+	public static String[] getContentFromFile(String extract, String filepath) {
 		FileReader fr = null;	
 		BufferedReader br = null;
 		try {
 				List<String> strs = new ArrayList<String>();
-				File f = new File(diffFile);
+				File f = new File(extract + filepath);
 				fr = new FileReader(f);
 				br = new BufferedReader(fr);
 				String line = null;
 				while ((line = br.readLine()) != null) {
 					strs.add(line);
 				}
-				return (String[]) strs.toArray();
+				return strs.toArray(new String[strs.size()]);
 			} catch (Exception e) {
 //				e.printStackTrace();
 				PrintUtils.print("读取文件异常: " + e.getMessage());
@@ -88,7 +89,7 @@ public class FileUtils {
 	}
 	
 	/**
-	 * 删除某文件夹所有文件
+	 * 删除文件夹以及所有子文件
 	 * 
 	 * @param path
 	 * @return
@@ -116,6 +117,9 @@ public class FileUtils {
 				delFolder(path + File.separator + tempList[i]);
 				flag = true;
 			}
+		}
+		if(flag) {
+			file.delete();
 		}
 		return flag;
 	}

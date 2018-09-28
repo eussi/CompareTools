@@ -3,6 +3,7 @@ package com.dcits.compare.tar.commonflow;
 import java.io.File;
 
 import com.dcits.compare.tar.constants.TarConstants;
+import com.dcits.compare.tar.utils.FileUtils;
 import com.dcits.compare.tar.utils.TarFileUtils;
 import com.dcits.core.IValveContext;
 import com.dcits.core.impl.ValveBase;
@@ -20,8 +21,11 @@ public class ExtractTarValve extends ValveBase{
 		PrintUtils.print(getInfo());
 		PrintUtils.printLine();
 		
-		String extractOrigDir = System.getProperty("user.dir") + File.separator + ".tmp" + File.separator + "orig";
-		String extractDestDir = System.getProperty("user.dir") + File.separator + ".tmp" + File.separator + "dest";
+		//删除old解压的临时文件
+	    String oldDir = System.getProperty("user.dir") + File.separator + ".tmp";
+	    FileUtils.delAllFile(oldDir);
+		String extractOrigDir = System.getProperty("user.dir") + File.separator + ".tmp" + File.separator + "orig" + File.separator;
+		String extractDestDir = System.getProperty("user.dir") + File.separator + ".tmp" + File.separator + "dest" + File.separator;
 		TarFileUtils.deCompressTARFile(orig, extractOrigDir);
 		TarFileUtils.deCompressTARFile(dest, extractDestDir);
 		

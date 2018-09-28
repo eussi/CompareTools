@@ -29,7 +29,7 @@ public class FileDiffShowValve extends ValveBase{
 			List<String> origHas = (List<String>) context.getTemp(TarConstants.ORIG_HAS);
 			List<String> destHas = (List<String>) context.getTemp(TarConstants.DEST_HAS);
 			
-			boolean isExtract = (boolean) context.getTemp(TarConstants.IS_EXTRACT);
+			Boolean isExtract = (Boolean) context.getTemp(TarConstants.IS_EXTRACT);
 			String origExtract = (String) context.getTemp(TarConstants.ORIG_EXTRACT);
 			String destExtract = (String) context.getTemp(TarConstants.DEST_EXTRACT);
 			
@@ -41,9 +41,9 @@ public class FileDiffShowValve extends ValveBase{
 				if(!listHas(origHas, origFile) && !listHas(commonButDiff, origFile)) {
 					byte[] origContent = null;
 					byte[] destContent = null;
-					if(isExtract) {
-						origContent = FileUtils.getFileContent(origFile);
-						destContent = FileUtils.getFileContent(origFile.replace(origExtract, destExtract));
+					if(isExtract!=null && isExtract) {
+						origContent = FileUtils.getFileContent(origExtract, origFile);
+						destContent = FileUtils.getFileContent(destExtract, origFile);
 					} else {
 						origContent = TarFileUtils.getFileContentFromTar(orig, origFile);
 						destContent = TarFileUtils.getFileContentFromTar(dest, origFile);
@@ -57,12 +57,12 @@ public class FileDiffShowValve extends ValveBase{
 				}
 			}
 			for(String destFile : destFiles) {
-				if(!listHas(destHas, destFile) && !listHas(commonButDiff, destFile.replace(destExtract, origExtract))) {
+				if(!listHas(destHas, destFile) && !listHas(commonButDiff, destFile)) {
 					byte[] origContent = null;
 					byte[] destContent = null;
-					if(isExtract) {
-						origContent = FileUtils.getFileContent(destFile.replace(destExtract, origExtract));
-						destContent = FileUtils.getFileContent(destFile);
+					if(isExtract!=null && isExtract) {
+						origContent = FileUtils.getFileContent(origExtract, destFile);
+						destContent = FileUtils.getFileContent(destExtract, destFile);
 					} else {
 						origContent = TarFileUtils.getFileContentFromTar(orig, destFile);
 						destContent = TarFileUtils.getFileContentFromTar(dest, destFile);

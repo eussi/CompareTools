@@ -216,7 +216,7 @@ public class TarFileUtils {
 					break;
 				}
 				if (entry.isDirectory()) {// 这里貌似不会运行到，跟ZipEntry有点不一样
-					new File(basePath+ File.separator + entry.getName()).mkdirs();
+					new File(basePath + entry.getName()).mkdirs();
 				} else {
 					FileOutputStream os = null;
 					try {

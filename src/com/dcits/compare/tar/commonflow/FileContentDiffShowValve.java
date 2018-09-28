@@ -25,7 +25,8 @@ public class FileContentDiffShowValve extends ValveBase{
 			PrintUtils.printLine();
 			//获取上一个valve所获取的内容
 			List<String> diffFiles = (List<String>) context.getTemp(TarConstants.FILE_DIFF);
-			boolean isExtract = (boolean) context.getTemp(TarConstants.IS_EXTRACT);
+			
+			Boolean isExtract = (Boolean) context.getTemp(TarConstants.IS_EXTRACT);
 			String origExtract = (String) context.getTemp(TarConstants.ORIG_EXTRACT);
 			String destExtract = (String) context.getTemp(TarConstants.DEST_EXTRACT);
 			
@@ -37,9 +38,9 @@ public class FileContentDiffShowValve extends ValveBase{
 				PrintUtils.print("比较文件：" + diffFile);
 				String[] origStrs = null;
 				String[] destStrs = null;
-				if(isExtract) {
-					origStrs = FileUtils.getContentFromFile(diffFile);
-					destStrs = FileUtils.getContentFromFile(diffFile.replace(origExtract, destExtract));
+				if(isExtract!=null && isExtract) {
+					origStrs = FileUtils.getContentFromFile(origExtract, diffFile);
+					destStrs = FileUtils.getContentFromFile(destExtract, diffFile);
 				} else {
 					origStrs = TarFileUtils.getStrArrayContentFromTar(orig, diffFile);
 					destStrs = TarFileUtils.getStrArrayContentFromTar(dest, diffFile);
@@ -52,8 +53,8 @@ public class FileContentDiffShowValve extends ValveBase{
 		    PrintUtils.printLine();
 		    
 		    //删除解压的临时文件
-		    String extractOrigDir = System.getProperty("user.dir") + File.separator + ".tmp";
-		    FileUtils.delAllFile(extractOrigDir);
+		    String newDir = System.getProperty("user.dir") + File.separator + ".tmp";
+		    FileUtils.delAllFile(newDir);
 	}
 	
 
