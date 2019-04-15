@@ -1,4 +1,4 @@
-::Program£º
+::Programï¿½ï¿½
 ::	CompareTools
 ::Author:
 ::	wangxueming
@@ -14,7 +14,7 @@ set cmd=%1%
 set origFilePath=%2%
 set destFilePath=%3%
 
-::Í³¼Æ²ÎÊý¸öÊý
+::Í³ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 set /a cnt=0
 :loop
 if not "%1"=="" (set /a cnt+=1&shift /1&goto :loop)
@@ -24,20 +24,20 @@ if %cnt% NEQ 3 (
 	goto exit
 )
 
-::JavaÓ¦ÓÃ¸ùÄ¿Â¼
+::JavaÓ¦ï¿½Ã¸ï¿½Ä¿Â¼
 set APP_HOME=%cd%
 
-::ÐèÒªÆô¶¯µÄJavaÀà
-set APP_MAINCLASS=com.dcits.startup.Bootstrap
+::ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Javaï¿½ï¿½
+set APP_MAINCLASS=com.eussi.startup.Bootstrap
 
-::classpath²ÎÊý£¬°üÀ¨Ö¸¶¨libÄ¿Â¼ÏÂËùÓÐµÄjar
+::classpathï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½libÄ¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½jar
 set CLASSPATH=%APP_HOME%\classes
 
 For /r "%APP_HOME%\lib" %%f in (*.jar) do (
 	set CLASSPATH=!CLASSPATH!;%%f
 )
 
-::javaÐéÄâ»úÆô¶¯²ÎÊý, MaxPermSize=128m; support was removed in 8.0
+::javaï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, MaxPermSize=128m; support was removed in 8.0
 set JAVA_OPTS=-Xms512m -Xmx512m -Xmn256m -Djava.awt.headless=true -XX:MaxPermSize=128m
 
 echo Starting %APP_MAINCLASS% ...
